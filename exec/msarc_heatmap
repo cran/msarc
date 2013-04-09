@@ -1,0 +1,13 @@
+library(msarc)
+args <- commandArgs(T)
+outfn <- args[1]
+fns <- args[2:length(args)]
+
+arcs <- list()
+for (fn in fns) {
+  msa <- msarc.loadMS(fn)
+  arcs <- c(arcs,list(msa))
+}
+pdf(outfn)
+msarc.plotHeatmap(arcs)
+dev.off()

@@ -1,0 +1,11 @@
+citHeader("To cite package 'msarc' please use:")
+citEntry(entry="article",
+         author=personList(as.person("Hisham Mohammed"),
+                           as.person("Gordon D. Brown")),
+         title="The Paper Title",
+         journal="To Be Decided",
+         year=2011,
+         volume=1,
+         number=1,
+         pages=1--10,
+         textVersion="Mohammed, H. and Brown, G.D., 'The Paper',Journal X(Y)")

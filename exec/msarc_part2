@@ -1,0 +1,8 @@
+library(msarc)
+args <- commandArgs(T)
+in.fn <- args[1]
+out.fn <- args[2]
+data.fn <- sprintf("%s.RData",in.fn)
+load(data.fn)
+msa <- msarc.loadTerms(msa,file=in.fn)
+msarc.plotSVG(msa,file=out.fn)

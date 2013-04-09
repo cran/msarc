@@ -1,0 +1,28 @@
+These are convenience scripts for making simple msarc diagrams.  They all
+operate on mass spec output files, saved as tab-separated text.
+
+msSubtract.py -- a Python script to subtract a control mass spec experiment
+  from the true experiment.  Usage:
+  > msSubtract.py experiment.txt control.txt output.txt
+
+msSummarize.py -- produce a simplified summary of a mass spec experiment. Usage:
+  > msSummarize.py in.file out.file
+ 
+msarc_heatmap -- Generate a heat map from a set of mass spec files.  Usage:
+  > Rscript msarc_heatmap output.pdf input1.txt input2.txt input3.txt ...
+
+msarc_part1 -- Run the first stages of msarc, until it needs manual intervention
+  to tidy up the list of GO categories.
+  > Rscript msarc_part1 input_ms.txt output_goTerms.txt
+  or
+  > Rscript msarc_part1 input_ms.txt control_ms.txt output_goTerms.txt
+  Writes the GO terms to output_goTerms.txt for manual editing.  Also saves the
+  msarc object in output_goTerms.txt.RData.  These filenames must match for the
+  second part of the script to work.
+
+msarc_part2 -- Runs the second half of msarc, generating the plot:
+  > Rscript msarc_part2 output_goTerms.txt diagram.svg
+  where output_goTerms.txt is the file you manually edited to select the set of
+  GO terms you are interested in.  You may find it useful to keep a copy of 
+  the un-edited list of terms, in case you have to try several iterations
+  of generating the diagram.

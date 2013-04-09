@@ -1,0 +1,20 @@
+library(msarc)
+args <- commandArgs(T)
+if (length(args) == 2) {
+  in.fn <- args[1]
+  out.fn <- args[2]
+  control.fn <- NULL
+} else {
+  in.fn <- args[1]
+  control.fn <- args[2]
+  out.fn <- args[3]
+}
+msa <- msarc.loadMS(in.fn)
+if (!is.null(control.fn)) {
+  control <- msarc.loadMS(control.fn)
+  msa <- msarc.subtract(msa,control)
+}
+msa <- msarc.findGOterms(msa)
+msarc.saveTerms(msa,file=out.fn)
+imageFN <- sprintf("%s.RData",out.fn)
+save(msa,file=imageFN)
