@@ -418,41 +418,45 @@ msarc.copyColors <- function(target,source) {
 }
   
 msarc.plotSVG <- function(msarc,file="msarc.svg") {
-  msarc$tree <- makeHierarchy(msarc$candidates,msarc$counts)
-  tree <- msarc$tree
-  conf <- msarc$conf
-  gotbl <- msarc$gotbl
-  radius <- conf$radius
-  conn <- file(file,open="w")
-  gosets <- msarc$go2uniAll
-  rawdata <- msarc$data
-  few <- msarc$candidates
-  colors <- msarc$palette
-  padding=10 
-  inner = radius * 0.7
-  outer = radius
-  draw.header(radius,padding,conn)
-  others <- getOthers(tree,gosets)
-  angles <- draw.arcs(tree,gotbl,others,inner,outer,conn,"all",colors)
-  rownames(angles) <- angles$id
-  palette <- as.list(angles$middle)
-  names(palette) <- angles$id
-  msarc$palette <- palette
-  sc_inner = radius * 0.1
-  sc_outer = radius * 0.6
-  lowCats <- getLowestGoCats(tree,gosets,rawdata$uniprot)
-  bestCats <- getSmallestGoCat(gosets,lowCats)
-  cat2u <- invertCats(bestCats)
-  scores <- sqrt(as.numeric(rawdata$score))
-  mscore <- max(scores)
-  scale <- (sc_outer - sc_inner) / mscore
-  draw.scores(tree,sc_inner,sc_outer,scale,cat2u,rawdata,angles,conn)
-  missing <- getMissing(tree,gosets,rawdata$uniprot)
-  missing <- sort(missing)
-  left <- angles$right[length(angles$right)]
-  right <- 2 * pi
-  draw.missing(missing,sc_inner,sc_outer,scale,rawdata,left,right,conn)
-  draw.footer(conn)
-  close(conn)
-  return(msarc)
+  if (require(GO.db)) {
+    msarc$tree <- makeHierarchy(msarc$candidates,msarc$counts)
+    tree <- msarc$tree
+    conf <- msarc$conf
+    gotbl <- msarc$gotbl
+    radius <- conf$radius
+    conn <- file(file,open="w")
+    gosets <- msarc$go2uniAll
+    rawdata <- msarc$data
+    few <- msarc$candidates
+    colors <- msarc$palette
+    padding=10 
+    inner = radius * 0.7
+    outer = radius
+    draw.header(radius,padding,conn)
+    others <- getOthers(tree,gosets)
+    angles <- draw.arcs(tree,gotbl,others,inner,outer,conn,"all",colors)
+    rownames(angles) <- angles$id
+    palette <- as.list(angles$middle)
+    names(palette) <- angles$id
+    msarc$palette <- palette
+    sc_inner = radius * 0.1
+    sc_outer = radius * 0.6
+    lowCats <- getLowestGoCats(tree,gosets,rawdata$uniprot)
+    bestCats <- getSmallestGoCat(gosets,lowCats)
+    cat2u <- invertCats(bestCats)
+    scores <- sqrt(as.numeric(rawdata$score))
+    mscore <- max(scores)
+    scale <- (sc_outer - sc_inner) / mscore
+    draw.scores(tree,sc_inner,sc_outer,scale,cat2u,rawdata,angles,conn)
+    missing <- getMissing(tree,gosets,rawdata$uniprot)
+    missing <- sort(missing)
+    left <- angles$right[length(angles$right)]
+    right <- 2 * pi
+    draw.missing(missing,sc_inner,sc_outer,scale,rawdata,left,right,conn)
+    draw.footer(conn)
+    close(conn)
+    return(msarc)
+  } else {
+    stop("Failed to load required package 'GO.db'.")
+  }
 }

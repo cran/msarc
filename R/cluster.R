@@ -25,7 +25,7 @@ invertGOlist <- function(gos) {
 # In: a list of GO terms.
 # Out: the list of those terms plus all ancestors.
 addOneAncestorSet <- function(terms) {
-  res <- unique(unlist(c(terms,lapply(terms,function(x) GOMFANCESTOR[[x]]))))
+  res <- unique(unlist(c(terms,lapply(terms,function(x) GO.db::GOMFANCESTOR[[x]]))))
   return(res)
 }
 
@@ -93,7 +93,7 @@ uniprot2go <- function(uniprot,eg2uniprot,eg2go,gocat) {
 go2table <- function(gos) {
   ids <- names(gos)
   sizes <- sapply(gos,length)
-  terms <- sapply(ids,function(x) GOTERM[[x]]@Term)
+  terms <- sapply(ids,function(x) GO.db::GOTERM[[x]]@Term)
   df <- data.frame(sizes,ids,terms,stringsAsFactors=F)
   colnames(df) = c('count','id','description')
   return(df)
@@ -101,7 +101,7 @@ go2table <- function(gos) {
 
 # return T if a GO term's ancestor is in the list of candidates, F otherwise
 parentInList <- function(id,candidates) {
-  anc <- GOMFANCESTOR[[id]]
+  anc <- GO.db::GOMFANCESTOR[[id]]
   found = candidates %in% anc
   return(sum(found) > 0)
 }
@@ -149,25 +149,29 @@ getSmallest <- function(ns,counts) {
 #     c) eg2go -- an AnnotationDBI map from entrez IDs to GO terms
 #     d) gocat -- which GO category to use (MF)
 # Out: named list of GO terms, each entry being a list of included uniprot IDs.
-msarc.findGOterms <- function(msarc,eg2uniprot=org.Hs.egUNIPROT,eg2go=org.Hs.egGO,minCount=10) {
-  gocat <- "MF"
-  gos <- uniprot2go(msarc$data$uniprot,eg2uniprot,eg2go,gocat)
-  msarc$go2uniBase <- invertGOlist(gos)
-  nonzeroflags <- sapply(gos,function(x) length(x) > 0)
-  nonzeroterms <- names(gos)[nonzeroflags]
-  missing = msarc$data$uniprot[!(msarc$data$uniprot %in% nonzeroterms)]
-  # augment with ancestors
-  gosAll <- addGoAncestors(gos)
-  # invert the list: go terms to uniprot IDs
-  go2uni <- invertGOlist(gosAll)
-  go2uni$all <- c(go2uni$all,missing)
-  msarc$go2uni <- go2uni
-  msarc$go2uniAll <- go2uni
-  gotbl <- go2table(msarc$go2uni)
-  colnames(gotbl) <- c('count','id','description')
-  rownames(gotbl) <- gotbl$id
-  msarc$gotbl <- gotbl[gotbl$count >= minCount,]
-  return(msarc)
+msarc.findGOterms <- function(msarc,eg2uniprot=org.Hs.eg.db::org.Hs.egUNIPROT,eg2go=org.Hs.eg.db::org.Hs.egGO,minCount=10) {
+  if (require(GO.db)) {
+    gocat <- "MF"
+    gos <- uniprot2go(msarc$data$uniprot,eg2uniprot,eg2go,gocat)
+    msarc$go2uniBase <- invertGOlist(gos)
+    nonzeroflags <- sapply(gos,function(x) length(x) > 0)
+    nonzeroterms <- names(gos)[nonzeroflags]
+    missing = msarc$data$uniprot[!(msarc$data$uniprot %in% nonzeroterms)]
+    # augment with ancestors
+    gosAll <- addGoAncestors(gos)
+    # invert the list: go terms to uniprot IDs
+    go2uni <- invertGOlist(gosAll)
+    go2uni$all <- c(go2uni$all,missing)
+    msarc$go2uni <- go2uni
+    msarc$go2uniAll <- go2uni
+    gotbl <- go2table(msarc$go2uni)
+    colnames(gotbl) <- c('count','id','description')
+    rownames(gotbl) <- gotbl$id
+    msarc$gotbl <- gotbl[gotbl$count >= minCount,]
+    return(msarc)
+  } else {
+    stop("Failed to load required package 'GO.db'.")
+  }
 }
 
 msarc.getTerms <- function(msarc) {
@@ -221,7 +225,7 @@ makeHierarchy <- function(terms,counts) {
     kidsets[[p]] = list()
   }
   for (k in kids) {
-    candidates = GOMFANCESTOR[[k]]
+    candidates = GO.db::GOMFANCESTOR[[k]]
     ps = parents[parents %in% candidates]
     p = getSmallest(ps,counts)
     kidsets[[p]] <- c(kidsets[[p]],k)

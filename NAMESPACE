@@ -11,7 +11,4 @@ export(msarc,
        msarc.copyColors,
        print.msarc,
        summary.msarc)
-importFrom(GO.db,GOTERM,GOMFANCESTOR)
-importFrom(org.Hs.eg.db,org.Hs.egUNIPROT,org.Hs.egGO)
-importFrom(org.Mm.eg.db,org.Mm.egUNIPROT,org.Mm.egGO)
 importFrom(gplots,heatmap.2)

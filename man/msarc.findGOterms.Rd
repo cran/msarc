@@ -7,7 +7,8 @@ with, and adds the map to the \code{msarc} object.  Any given accession
 will most likely be associated with multiple GO terms.
 }
 \usage{
-msarc.findGOterms(msarc,eg2uniprot=org.Hs.egUNIPROT,eg2go=org.Hs.egGO,minCount=10)
+msarc.findGOterms(msarc,eg2uniprot=org.Hs.eg.db::org.Hs.egUNIPROT,
+                  eg2go=org.Hs.eg.db::org.Hs.egGO,minCount=10)
 }
 \arguments{
   \item{msarc}{the \code{msarc} object to add GO terms to.}
@@ -38,6 +39,7 @@ unification of biology". Nature Genetics 25:25-29 (2000)}
 data(sample_subtracted,package="msarc")
 
 # run the mapping stage
-sample_go <- msarc.findGOterms(sample_subtracted)
+\dontrun{sample_go <- msarc.findGOterms(sample_subtracted)}
+\dontshow{data(sample_goterms,package="msarc")}
 }
 \keyword{manip}

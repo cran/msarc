@@ -52,7 +52,8 @@ data(sample_goterms,package="msarc")
 \dontrun{msarc.saveTerms(sample_goterms)}
 \dontrun{sample_filtered <- msarc.loadTerms(sample_goterms,"terms.txt")}
 tbl <- msarc.getTerms(sample_goterms)
-tbl <- tbl[c("GO:0017076","GO:0030554","GO:0032553","GO:0032555","GO:0032559","GO:0035639","GO:0036094","GO:0097159","GO:0017111","GO:0016462"),]
+tbl <- tbl[c("GO:0017076","GO:0030554","GO:0032553","GO:0032555","GO:0032559",
+             "GO:0035639","GO:0036094","GO:0097159","GO:0017111","GO:0016462"),]
 sample_filtered <- msarc.filterTerms(sample_goterms,tbl)
 }
 \keyword{IO}
