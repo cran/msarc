@@ -101,6 +101,10 @@ go2table <- function(gos) {
 
 # return T if a GO term's ancestor is in the list of candidates, F otherwise
 parentInList <- function(id,candidates) {
+  if (is.na(id)) {
+    warning("Got NA in parentInList")
+    return(F)
+  }
   anc <- GO.db::GOMFANCESTOR[[id]]
   found = candidates %in% anc
   return(sum(found) > 0)
@@ -209,6 +213,7 @@ msarc.filterTerms <- function(msarc,keepers) {
     klist <- keepers
   }
   msarc$gotbl <- msarc$gotbl[klist,]
+  msarc$gotbl <- msarc$gotbl[!is.na(msarc$gotbl$id),]
   msarc <- setCandidates(msarc)
   return(msarc)
 }
