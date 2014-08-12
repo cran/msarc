@@ -361,7 +361,7 @@ draw.scores <- function(tree,inner,outer,scale,cats,raw,angles,conn) {
     for (u in cats[[id]]) {
       rd <- raw[raw$uniprot==u,]
       dist <- sqrt(as.numeric(rd$score)) * scale
-      if (dist < 1) {
+      if (is.na(dist) || dist < 1) {
         dist <- 1
       }
       l <- langle + segment * j
@@ -392,7 +392,7 @@ draw.missing <- function(missing,inner,outer,scale,raw,left,right,conn) {
   for (u in missing) {
     rd <- raw[raw$uniprot==u,]
     dist <- sqrt(as.numeric(rd$score)) * scale
-    if (dist < 1) {
+    if (is.na(dist) || dist < 1) {
       dist <- 1
     }
     l <- left + segment * j

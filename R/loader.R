@@ -9,7 +9,7 @@ read.nested <- function(filename) {
   # make the data frame... colnames from first line, minus trailing tabs
   lines <- sub("\t*$","",lines)
   fields <- strsplit(lines,"\t")
-  names <- fields[[1]]
+  names <- gsub("^\\s+|\\s+$","",fields[[1]])
   first <- fields[[2]]
   frame <- data.frame(t(first),stringsAsFactors=F)
   colnames(frame) <- names
