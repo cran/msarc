@@ -29,7 +29,7 @@ read.nested <- function(filename) {
 # the form "- [XXX_YYYY]" where "XXX" is the symbol and "YYYY" is the species
 # (though it doesn't check or use the species in any way)
 extract.symbols <- function(descriptions) {
-  return(sub("^.*-\\s\\[(\\w+)_[A-Z]+\\]\"?","\\1",descriptions,perl=T))
+  return(sub("^.*-\\s\\[(\\w+)_[A-Z0-9]+\\]\"?","\\1",descriptions,perl=T))
 }
 
 # Load a table from a mass spec experiment.  If there is no column named
@@ -43,7 +43,12 @@ extract.symbols <- function(descriptions) {
 msarc.loadMS <- function(file,onlyDiff=T,config=list()) {
   conf <- config.defaults
   conf[names(config)] = config
-  tbl <- read.nested(file)
+  if (length(grep("xlsx",file))>0) {
+    tbl <- readWorksheetFromFile(file,sheet=1)
+    tbl <- tbl[!is.na(tbl[[conf$accessionCol]]),]
+  } else {
+    tbl <- read.nested(file)
+  }
   if (conf$heavyCol %in% colnames(tbl) && onlyDiff) {
     tbl_diff <- tbl[[conf$heavyCol]] != ""
     tbl <- tbl[tbl_diff,]

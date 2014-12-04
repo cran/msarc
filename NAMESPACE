@@ -7,8 +7,13 @@ export(msarc,
        msarc.loadTerms,
        msarc.filterTerms,
        msarc.plotSVG,
+       msarc.plotCircle,
        msarc.plotHeatmap,
+       msarc.tagCloud,
        msarc.copyColors,
        print.msarc,
        summary.msarc)
 importFrom(gplots,heatmap.2)
+importFrom(XLConnect,readWorksheetFromFile)
+importFrom(RColorBrewer,brewer.pal)
+importFrom(wordcloud,wordcloud)

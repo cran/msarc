@@ -327,6 +327,9 @@ findAngle <- function(kids,angles) {
 }
 
 draw.tag <- function(conn,theta,dist,symbol) {
+  if (nchar(symbol) > 6) {
+    symbol <- substr(symbol,1,6)
+  }
   if (theta > pi && theta < 2*pi) {
     offset = theta + pi
     anchor = "end"
@@ -459,4 +462,50 @@ msarc.plotSVG <- function(msarc,file="msarc.svg") {
   } else {
     stop("Failed to load required package 'GO.db'.")
   }
+}
+
+draw.blind.scores <- function(inner,outer,scale,raw,conn,color) {
+  lines <- dim(raw)[1]
+  perm <- sample(1:lines)
+  dist <- (sqrt(as.numeric(raw$score)) * scale)[perm]
+  dist[is.na(dist) | dist < 1] = 1
+  sym <- raw$symbol[perm]
+  for (i in 1:lines) {
+    m <- (2*pi) * (i / lines)
+    xi <- inner * cos(m)
+    yi <- inner * sin(m)
+    xo <- (inner + dist[i]) * cos(m)
+    yo <- (inner + dist[i]) * sin(m)
+    line <- sprintf("<path d=\"M %f,%f L %f,%f\" style=\"stroke-width:3; stroke: rgb(%d,%d,%d);\" />\n",
+                      xi,yi,xo,yo,color[1],color[2],color[3])
+    cat(line,file=conn,sep="")
+    if (dist[i] > (outer - inner) * 0.1) {
+      draw.tag(conn,m,inner+dist[i]+20,sym[i])
+    }
+  }
+}
+
+msarc.plotCircle <- function(msarc,file="nocat.svg",col=c(0,255,0)) {
+  conf <- msarc$conf
+  radius <- conf$radius
+  conn <- file(file,open="w")
+  rawdata <- msarc$data
+  padding=10 
+  draw.header(radius,padding,conn)
+  sc_inner <- radius * 0.1
+  sc_outer <- radius * 0.9
+  scores <- sqrt(as.numeric(rawdata$score))
+  mscore <- max(scores)
+  scale <- (sc_outer - sc_inner) / mscore
+  draw.blind.scores(sc_inner,sc_outer,scale,rawdata,conn,col)
+  draw.footer(conn)
+  close(conn)
+  return(msarc)
+}
+
+msarc.tagCloud <- function(msarc,pal=NA,...) {
+  if (is.na(pal)) {
+    pal = brewer.pal(10,"Spectral")
+  }
+  wordcloud(msarc$data$symbol,sqrt(as.numeric(msarc$data$score)),colors=pal,...)
 }
