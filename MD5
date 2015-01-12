@@ -1,10 +1,10 @@
-9822a45cf7bfca78dae41f68f45d7e22 *DESCRIPTION
-ee6c2add7c08a01f72d80b7791b41b69 *NAMESPACE
-5bb3bfa4b8cf5ef60fc728d2260d3d28 *R/cluster.R
+a44b8a1a034ed8b9489d3ab0a357ec19 *DESCRIPTION
+94bd453eff0747b3f6f9907ec6642b0f *NAMESPACE
+d6e6ae4592a1752c38c2e99353cb090b *R/cluster.R
 bc0edc5470633b1c51434875b7fc361f *R/heatmap.R
 aa3e18f7400f0dec05876ad0276bbfc1 *R/loader.R
 ede86a78ba5382ec28dcb694b92c39ef *R/msarc.R
-7e87a0813e344570539a4b78903b7f41 *R/plotter.R
+b55a0d2d74c84fa16eef3f14744d8806 *R/plotter.R
 1c9fdce5ba6855f6fde83bb3b8e5df10 *build/vignette.rds
 f70233208b97a862bb5ed7c708fffa4e *data/control_df.txt.gz
 dc7647d4fc017126ee397f9fbc51bfcf *data/control_initial.rda
@@ -23,7 +23,7 @@ bc8f37b3fd21ef3f9721a4049a4c19f3 *exec/msSubtract.py
 00b5a1131cbedabfb6d797891b4b05d9 *inst/CITATION
 ff90cc3dd3a8587bb634a94ce0524e85 *inst/doc/msarc.R
 fdc233adbdc1faf427bd543229bcce5b *inst/doc/msarc.Rnw
-07ddda44052b56230a9d8bc8b819fe49 *inst/doc/msarc.pdf
+3abe547bed56c7b5e702eba268c8708b *inst/doc/msarc.pdf
 c19e6675939e8c8f0bb408aad8cc333d *inst/extdata/sample_colnames.txt.gz
 a5f496c04df7b170e60e677e1bced81e *inst/extdata/sample_msdata.txt.gz
 05bf849ff4230e63fbe7014b4a4abc3d *man/msarc-package.Rd

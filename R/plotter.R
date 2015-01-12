@@ -185,7 +185,7 @@ draw.arc.set <- function(tree,gotbl,depths,parent,others,mdepth,inner,outer,left
 }
 
 # In: a. Tree of GO terms
-#     b. Counts for each GO term
+#     b. Counts for each GO term
 #     c. Radius of inner boundary
 #     d. Radius of outer boundary
 # Out: left, right angles for each GO term, plus side effect of writing to
@@ -421,7 +421,7 @@ msarc.copyColors <- function(target,source) {
 }
   
 msarc.plotSVG <- function(msarc,file="msarc.svg") {
-  if (require(GO.db)) {
+  if (requireNamespace("GO.db",quietly=TRUE)) {
     msarc$tree <- makeHierarchy(msarc$candidates,msarc$counts)
     tree <- msarc$tree
     conf <- msarc$conf

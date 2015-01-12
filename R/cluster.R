@@ -154,7 +154,7 @@ getSmallest <- function(ns,counts) {
 #     d) gocat -- which GO category to use (MF)
 # Out: named list of GO terms, each entry being a list of included uniprot IDs.
 msarc.findGOterms <- function(msarc,eg2uniprot=org.Hs.eg.db::org.Hs.egUNIPROT,eg2go=org.Hs.eg.db::org.Hs.egGO,minCount=10) {
-  if (require(GO.db)) {
+  if (requireNamespace("GO.db",quietly=TRUE)) {
     gocat <- "MF"
     gos <- uniprot2go(msarc$data$uniprot,eg2uniprot,eg2go,gocat)
     msarc$go2uniBase <- invertGOlist(gos)
